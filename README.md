@@ -8,6 +8,6 @@ Recognised input then executes different macros for moving and such to play CSGO
 - npm start (frontend react app)
 
 ### TODO
-- Train new model with updated words (Currently implementing)
+- *Train new model with updated words* (runs off default wordset for now)
 - Finish movement macros (1/2 done)
 - Add mouse input macros for aiming

@@ -16,13 +16,29 @@ server.use(express.json())
 server.post('/express_backend', (req, res) => {
     console.log(req.body.cmd);
     switch(req.body.cmd) {
-        case 'go':
-            macro.goForward();
-            console.log("Executed: go");
+        case 'up':
+        break;
+        case 'down':
+        break;
+        case 'left':
+        break;
+        case 'right':
+        break;
+        case 'shoot':
+        break;
+        case 'spray':
         break;
         case 'stop':
             macro.stopMovement();
             console.log("Stopped")
+        break;
+        case 'jump':
+            macro.jumpUp();
+            console.log("Jumped");
+        break;
+        case 'go':
+            macro.goForward();
+            console.log("Executed: go");
         break;
     }
 

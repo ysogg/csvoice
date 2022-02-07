@@ -7,14 +7,6 @@ const speechCommands = require('@tensorflow-models/speech-commands');
 
 const axios = require('axios');
 
-//Doesn't work well
-// const sendPost = async (url, post) => {
-//   await axios.post(url, {
-//     cmd: post,
-//     timeout: 2
-//   })
-// }
-
 
 const App = () => {
   // States //
@@ -22,13 +14,20 @@ const App = () => {
   const [action, setAction] = useState(null)
   const [labels, setLabels] = useState(null)
   var lastAction;
-  //2: down, 6: go, 9: no, 11: right, 14: stop, 17: up, 18: yes
-  //left right, down (crouch), and then stop / go for forward
-  //shoot by either determine mouse1_pressed or rebinding shoot ingame
+  /* Available words: 
+  * 1-9, up, down, left, right, yes, no, go, stop
+  */
 
   // Recog //
   const loadModel = async () => {
-    const recogniser = await speechCommands.create("BROWSER_FFT")
+  //   const recogniser = await speechCommands.create(
+  //   'BROWSER_FFT', 
+  //   null,
+  //   'file://./model/my-model.json',
+  //   'file://./model/metadata.json'
+  // ); -> This should load a custom model but it does not `\_O_/`
+
+    const recogniser = await speechCommands.create("BROWSER_FFT");
     console.log('Model Loaded')
     await recogniser.ensureModelLoaded();
     console.log(recogniser.wordLabels())
@@ -58,55 +57,43 @@ const App = () => {
   }
 
 
-// //MACRO STUFF
-//Some of the commands get hung up, try implementing a thing that cancels any in progress posts.
-if (action === "look") {
-  lastAction = "look";
-} else if (lastAction === "look") {
-  switch (action) {
-    case "up":
-
-    break;
-    case "down":
-
-    break;
-    case "left":
-
-    break;
-    case "right":
-
-    break;
-  }
-} else if (action === "go") {
-  lastAction = "go";
-  //post
-} else if (action === "stop") {
-  lastAction = "stop";
-  //post
-}
-
-
-if (action === "go") {
+  // MACRO STUFF //
+  //Some of the commands get hung up, try implementing a thing that cancels any in progress posts.
+  //If I say go and then up do a crouch jump otherwise everything else is single words
+  //"two" will toggle shift walk
+  if (action === "up" && lastAction === "go") {
+    //Jump up
+  } else if (action === "up" && lastAction !== "go") {
+    //Look up
+  } else if (action === "go") {
+    lastAction = "go";
     axios.post('/express_backend', {cmd: 'go'}, {timeout: 100}).then(response => {
       console.log(response.data);
     }).catch(err => {
       console.log(err.code);
       console.log(err.message);
       console.log(err.stack);
-    });
-    // sendPost('/express_backend', 'go'); 
-
+    }); 
   } else if (action === "stop") {
+    lastAction = "stop";
     axios.post('/express_backend', {cmd: 'stop'}, {timeout: 100}).then(response => {
       console.log(response.data);
-    }).catch(err => {
+    }).catch(err => {  
       console.log(err.code);
       console.log(err.message);
       console.log(err.stack);
     });
-    // sendPost('/express_backend', 'stop');
+  } else if (action === "left") { 
+    lastAction = "left";
+      axios.post('/express_backend', {cmd: 'left'}, {timeout: 100}).then(response => {
+        console.log(response.data);
+      }).catch(err => {
+        console.log(err.code);
+        console.log(err.message);
+        console.log(err.stack);
+      });
   } else {
-    
+      
   }
 
 

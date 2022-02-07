@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/model
+metadata.json
+my-model.json
+my-model.weights.bin

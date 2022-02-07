@@ -22,11 +22,64 @@
 //     }
 // }
 char CURR_KEY;
-std::string look() {
+
+// -- MOUSE -- //
+std::string up() {
   // input.type = INPUT_MOUSE;
-  return "look";
+  return "looked up";
 }
 
+std::string down() {
+  // input.type = INPUT_MOUSE;
+  return "looked down";
+}
+
+std::string left() {
+  // input.type = INPUT_MOUSE;
+  return "looked left";
+}
+
+std::string right() {
+  // input.type = INPUT_MOUSE;
+  return "looked right";
+}
+
+//Haven't decided if it will tap or spray, (could do both with a toggle)
+std::string shoot() {
+  INPUT input = { 0 };
+  input.type = INPUT_MOUSE;
+  input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  SendInput(1, &input, sizeof(INPUT));
+
+  Sleep(10);
+
+  ZeroMemory(&input,sizeof(INPUT)); 
+  input.type = INPUT_MOUSE; 
+  input.mi.dwFlags = MOUSEEVENTF_LEFTUP; 
+  SendInput(1,&input,sizeof(INPUT)); 
+
+  return "shot"; 
+}
+
+std::string spray() {
+  INPUT input = { 0 };
+
+  input.type = INPUT_MOUSE;
+  input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  SendInput(1, &input, sizeof(INPUT));
+
+  Sleep(1000); //determines how long spray lasts
+
+  ZeroMemory(&input,sizeof(INPUT)); 
+  input.type = INPUT_MOUSE; 
+  input.mi.dwFlags = MOUSEEVENTF_LEFTUP; 
+  SendInput(1,&input,sizeof(INPUT)); 
+
+  return "sprayed";
+}
+
+
+// -- KEYBOARD -- ??
 std::string stop() {
   SHORT key;
   UINT mappedkey;
@@ -44,9 +97,23 @@ std::string stop() {
 }
 
 std::string jump() {
-
+  
   //keydown then keyup
-  return "Jump";
+  UINT mappedkey;
+  INPUT input = {0};
+
+  mappedkey = MapVirtualKey(VK_SPACE, 0);
+  input.type = INPUT_KEYBOARD;
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE;
+  input.ki.wScan = mappedkey;
+  SendInput(1, &input, sizeof(input));
+  Sleep(10);
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+  SendInput(1, &input, sizeof(input));
+
+  return "Jumped";
 }
 
 std::string go() {
@@ -68,3 +135,10 @@ std::string go() {
 
   return "go go go";
 }
+
+//Add crouch
+
+
+//**Note
+//Issue with starting movement persists in csgo -> look into this
+//Change to void once testing is done

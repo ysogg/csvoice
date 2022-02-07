@@ -1,6 +1,10 @@
 #include <string>
-
+std::string up();
+std::string down();
+std::string left();
+std::string right();
+std::string shoot();
+std::string spray();
 std::string stop();
 std::string jump();
 std::string go();
-std::string look();
