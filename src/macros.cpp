@@ -25,7 +25,10 @@ char CURR_KEY;
 
 // -- MOUSE -- //
 std::string up() {
-  // input.type = INPUT_MOUSE;
+  //Snaps to position instead of gradually moving up
+  POINT currPos;
+  GetCursorPos(&currPos);
+  SetCursorPos(currPos.x, currPos.y - 75);
   return "looked up";
 }
 
