@@ -3,18 +3,10 @@
 #include "macros.h"
 
 // --- //
-Napi::String lookUp(const Napi::CallbackInfo& info) {
+Napi::String crouchDown(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    std::string result = up();
-
-    return Napi::String::New(env, result);
-}
-
-Napi::String lookDown(const Napi::CallbackInfo& info) {
-    Napi::Env env = info.Env();
-
-    std::string result = down();
+    std::string result = crouch();
 
     return Napi::String::New(env, result);
 }
@@ -78,13 +70,8 @@ Napi::String goForward(const Napi::CallbackInfo& info) {
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(
-        Napi::String::New(env, "lookUp"), 
-        Napi::Function::New(env, lookUp)   
-    );
-
-    exports.Set(
-        Napi::String::New(env, "lookDown"), 
-        Napi::Function::New(env, lookDown)   
+        Napi::String::New(env, "crouchDown"), 
+        Napi::Function::New(env, crouchDown)   
     );
 
     exports.Set(

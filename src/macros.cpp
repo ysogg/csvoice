@@ -5,49 +5,57 @@
 #include <windows.h>
 #include <iostream>
 
-// int main() {
-//     while (true) {
-//         if (GetAsyncKeyState(VK_NUMPAD0)) {
-//             return 0;
-//         }
-//         if (GetAsyncKeyState(VK_NUMPAD1)) {
-//             INPUT input = { 0 };
-//             input.type = INPUT_KEYBOARD;
-//             input.ki.wVk = VkKeyScan('w');
-//             SendInput(1, &input, sizeof(input));
-//         }
-//         if (GetAsyncKeyState(VK_NUMPAD2)) {
 
-//         }
-//     }
-// }
 char CURR_KEY;
 
-// -- MOUSE -- //
-std::string up() {
-  //Snaps to position instead of gradually moving up
-  POINT currPos;
-  GetCursorPos(&currPos);
-  SetCursorPos(currPos.x, currPos.y - 75);
-  return "looked up";
-}
-
-std::string down() {
-  // input.type = INPUT_MOUSE;
-  return "looked down";
+std::string crouch() {
+  // May implement later
+  return "crouched";
 }
 
 std::string left() {
-  // input.type = INPUT_MOUSE;
+  SHORT key;
+  UINT mappedkey;
+  INPUT input = { 0 };
+  key = VkKeyScan('9'); // bound to +left in game
+  CURR_KEY = '9'; 
+
+  mappedkey = MapVirtualKey(LOBYTE(key), 0);
+  input.type = INPUT_KEYBOARD;
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE;
+  input.ki.wScan = mappedkey;
+  SendInput(1, &input, sizeof(input));
+  Sleep(100);
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+  SendInput(1, &input, sizeof(input));
+
   return "looked left";
 }
 
 std::string right() {
-  // input.type = INPUT_MOUSE;
+  SHORT key;
+  UINT mappedkey;
+  INPUT input = { 0 };
+  key = VkKeyScan('8'); // bound +right in game
+  CURR_KEY = '8'; 
+
+  mappedkey = MapVirtualKey(LOBYTE(key), 0);
+  input.type = INPUT_KEYBOARD;
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE;
+  input.ki.wScan = mappedkey;
+  SendInput(1, &input, sizeof(input));
+  Sleep(100);
+
+  input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+  SendInput(1, &input, sizeof(input));
+
   return "looked right";
 }
 
-//Haven't decided if it will tap or spray, (could do both with a toggle)
+//Alternate shoot command for tapping
 std::string shoot() {
   INPUT input = { 0 };
   input.type = INPUT_MOUSE;
@@ -56,10 +64,10 @@ std::string shoot() {
 
   Sleep(10);
 
-  ZeroMemory(&input,sizeof(INPUT)); 
+  ZeroMemory(&input, sizeof(INPUT)); 
   input.type = INPUT_MOUSE; 
   input.mi.dwFlags = MOUSEEVENTF_LEFTUP; 
-  SendInput(1,&input,sizeof(INPUT)); 
+  SendInput(1, &input, sizeof(INPUT)); 
 
   return "shot"; 
 }
@@ -71,12 +79,13 @@ std::string spray() {
   input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
   SendInput(1, &input, sizeof(INPUT));
 
-  Sleep(1000); //determines how long spray lasts
+  Sleep(500); //Should determine how long spray lasts
 
-  ZeroMemory(&input,sizeof(INPUT)); 
+  ZeroMemory(&input, sizeof(INPUT)); 
+
   input.type = INPUT_MOUSE; 
   input.mi.dwFlags = MOUSEEVENTF_LEFTUP; 
-  SendInput(1,&input,sizeof(INPUT)); 
+  SendInput(1, &input, sizeof(INPUT)); 
 
   return "sprayed";
 }
@@ -95,12 +104,11 @@ std::string stop() {
   input.ki.dwFlags = KEYEVENTF_KEYUP;
   SendInput(1, &input, sizeof(input));
 
-  CURR_KEY = ' ';
+  // CURR_KEY = ' ';
   return "Stopped";
 }
 
 std::string jump() {
-  
   //keydown then keyup
   UINT mappedkey;
   INPUT input = {0};
@@ -139,7 +147,6 @@ std::string go() {
   return "go go go";
 }
 
-//Add crouch
 
 
 //**Note

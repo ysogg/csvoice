@@ -1,6 +1,5 @@
 #include <string>
-std::string up();
-std::string down();
+std::string crouch();
 std::string left();
 std::string right();
 std::string shoot();

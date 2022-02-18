@@ -6,14 +6,13 @@ const tf = require('@tensorflow/tfjs');
 const speechCommands = require('@tensorflow-models/speech-commands');
 
 const axios = require('axios');
-
+var lastAction = ""; // used for debug
 
 const App = () => {
   // States //
   const [model, setModel] = useState(null)
   const [action, setAction] = useState(null)
   const [labels, setLabels] = useState(null)
-  var lastAction;
   /* Available words: 
   * 1-9, up, down, left, right, yes, no, go, stop
   */
@@ -47,6 +46,7 @@ const App = () => {
     model.listen(result=>{
       console.log(result)
       setAction(labels[argMax(Object.values(result.scores))])
+      console.log(action);
     }, {includeSpectogram:true, probabilityThreshold:0.9})
   }
 
@@ -58,14 +58,7 @@ const App = () => {
 
 
   // MACRO STUFF //
-  //Some of the commands get hung up, try implementing a thing that cancels any in progress posts.
-  //If I say go and then up do a crouch jump otherwise everything else is single words
-  //"two" will toggle shift walk
-  if (action === "up" && lastAction === "go") {
-    //Jump up
-  } else if (action === "up" && lastAction !== "go") {
-    //Look up
-  } else if (action === "go") {
+  if (action === "go") {
     lastAction = "go";
     axios.post('/express_backend', {cmd: 'go'}, {timeout: 100}).then(response => {
       console.log(response.data);
@@ -74,7 +67,9 @@ const App = () => {
       console.log(err.message);
       console.log(err.stack);
     }); 
-  } else if (action === "stop") {
+  } 
+  
+  else if (action === "stop") {
     lastAction = "stop";
     axios.post('/express_backend', {cmd: 'stop'}, {timeout: 100}).then(response => {
       console.log(response.data);
@@ -83,17 +78,50 @@ const App = () => {
       console.log(err.message);
       console.log(err.stack);
     });
-  } else if (action === "left") { 
+  } 
+  
+  else if (action === "left") { 
     lastAction = "left";
-      axios.post('/express_backend', {cmd: 'left'}, {timeout: 100}).then(response => {
+    axios.post('/express_backend', {cmd: 'left'}, {timeout: 100}).then(response => {
+      console.log(response.data);
+    }).catch(err => {
+      console.log(err.code);
+      console.log(err.message);
+      console.log(err.stack);
+    });
+  } 
+  
+  else if (action === "right") {
+    lastAction = "right";
+      axios.post('/express_backend', {cmd: 'right'}, {timeout: 100}).then(response => {
         console.log(response.data);
       }).catch(err => {
         console.log(err.code);
         console.log(err.message);
         console.log(err.stack);
-      });
-  } else {
-      
+      }); 
+  } 
+  
+  else if (action === "yes") {
+    lastAction = "yes";
+    axios.post('/express_backend', {cmd: 'shoot'}, {timeout: 100}).then(response => {
+      console.log(response.data);
+    }).catch(err => {
+      console.log(err.code);
+      console.log(err.message);
+      console.log(err.stack);
+    }); 
+  }
+
+  else if (action === "up") {
+    lastAction = "up";
+    axios.post('/express_backend', {cmd: 'jump'}, {timeout: 100}).then(response => {
+      console.log(response.data);
+    }).catch(err => {
+      console.log(err.code);
+      console.log(err.message);
+      console.log(err.stack);
+    }); 
   }
 
 
