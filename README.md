@@ -3,9 +3,6 @@ Uses TensorFlow.js voice recognition to capture and recognise input (ripped from
 
 Recognised input then executes different macros for moving and such to play CSGO
 
-### VERSION
-- Current version is release 1.0
-
 ### RUNNING
 - node server.js (backend)
 - npm start (frontend react app)
