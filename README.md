@@ -1,5 +1,5 @@
 # csvoice
-Uses TensorFlow.js voice recognition to capture and recognise input (ripped from https://www.youtube.com/watch?v=wzWcaLkCy1w).
+Uses TensorFlow.js voice recognition to capture and recognise input (from https://www.youtube.com/watch?v=wzWcaLkCy1w).
 
 Recognised input then executes different macros for moving and such to play CSGO
 
